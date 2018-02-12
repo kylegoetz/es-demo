@@ -13,7 +13,6 @@ fi
 if [ ! -f ./certificate.pem ]; then
   openssl req \
     -newkey rsa:2048 \
-    -notes \
     -keyout key.pem \
     -x509 \
     -days 365 \
