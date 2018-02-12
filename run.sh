@@ -24,11 +24,11 @@ fi
 
 docker run \
   --name es-demo \
-  -v $(PWD)/certificate.pem:/etc/nginx/certificate.pem:ro \
-  -v $(PWD)/key.pem:/etc/nginx/key.pem \
-  -v $(PWD)/nginx.conf:/etc/nginx/nginx.conf:ro \
-  -v $(PWD)/build:/app:ro \
-  -v $(PWD)/logs:/logs \
+  -v $(pwd)/certificate.pem:/etc/nginx/certificate.pem:ro \
+  -v $(pwd)/key.pem:/etc/nginx/key.pem \
+  -v $(pwd)/nginx.conf:/etc/nginx/nginx.conf:ro \
+  -v $(pwd)/build:/app:ro \
+  -v $(pwd)/logs:/logs \
   -p 443:443 \
   -d \
   nginx
