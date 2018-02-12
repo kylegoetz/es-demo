@@ -1,7 +1,7 @@
 #!/bin/bash
 
-docker stop es-demo
-docker rm es-demo
+docker stop es-demo || sudo docker stop es-demo
+docker rm es-demo || sudo docker rm es-demo
 
 if [ ! -d ./node_modules ] ; then
   npm install
