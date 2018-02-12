@@ -1,5 +1,8 @@
 #!/bin/bash
 
+docker stop es-demo
+docker rm es-demo
+
 if [ ! -d ./node_modules ] ; then
   npm install
 fi
