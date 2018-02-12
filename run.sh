@@ -1,9 +1,11 @@
 #!/bin/bash
 
-npm install
+if [ ! -d ./node_modules ] ; then
+  npm install
+fi
 
 # Initial build if not already built
-if [ ! -f ./build ] ; then
+if [ ! -d ./build ] ; then
   npm run-script build
 fi
 
