@@ -23,7 +23,7 @@ sudo docker run \
   --name es-demo \
   -v ./nginx.conf:/etc/nginx/nginx.conf:ro \
   -v ./build:/app:ro \
-  -v ./logs:/logs
-  -P
-  -d
+  -v ./logs:/logs \
+  -P \
+  -d \
   nginx
