@@ -26,7 +26,7 @@ import './App.css';
 import '../node_modules/searchkit/release/theme.css';
 
 class App extends Component {
-  host = '/api/query';
+  host = '/api';
   searchkit = Object.assign(new SearchkitManager(this.host), {
   translateFunction: key => ({
     'pagination.next': 'Next Page',
