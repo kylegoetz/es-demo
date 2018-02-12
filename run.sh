@@ -15,18 +15,20 @@ fi
 # Create self-signed SSL cert if not exist
 if [ ! -f ./certificate.pem ]; then
   openssl req \
-    -newkey rsa:2048 \
-    -keyout key.pem \
+    -nodes \
+    -new \
     -x509 \
-    -days 365 \
+    -keyout key.pem \
     -out certificate.pem
 fi
 
-sudo docker run \
+docker run \
   --name es-demo \
-  -v ./nginx.conf:/etc/nginx/nginx.conf:ro \
-  -v ./build:/app:ro \
-  -v ./logs:/logs \
-  -P \
+  -v $(PWD)/certificate.pem:/etc/nginx/certificate.pem:ro \
+  -v $(PWD)/key.pem:/etc/nginx/key.pem \
+  -v $(PWD)/nginx.conf:/etc/nginx/nginx.conf:ro \
+  -v $(PWD)/build:/app:ro \
+  -v $(PWD)/logs:/logs \
+  -p 443:443 \
   -d \
   nginx
