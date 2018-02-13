@@ -6,6 +6,7 @@ import {
   HierarchicalMenuFilter,
   RefinementListFilter,
   LayoutBody,
+  RangeFilter,
   LayoutResults,
   ResetFilters,
   Pagination,
@@ -19,11 +20,45 @@ import {
   ActionBar,
   ActionBarRow,
   ViewSwitcherToggle,
+  SortingSelector,
   SelectedFilters,
-  Hits
+  Hits,
+  HitsStats
 } from 'searchkit';
 import './App.css';
 import '../node_modules/searchkit/release/theme.css';
+
+const MSWordIcon = () => Icon('https://png.icons8.com/ios/1600/ms-word.png');
+const PDFIcon = () => Icon('https://image.flaticon.com/icons/svg/80/80942.svg');
+const ExcelIcon = () => Icon('https://png.icons8.com/ios/1600/ms-excel.png');
+const DefaultIcon = () => Icon('https://cdn0.iconfinder.com/data/icons/thin-files-documents/57/thin-071_file_document_code_binary-512.png');
+
+const Icon = src => (
+  <img className="result-icon"  src={src}/>
+);
+
+const getIcon = type => {
+  return ({
+    'application/msword': <MSWordIcon/>,
+    'application/pdf': <PDFIcon/>,
+    'application/vnd.ms-excel': <ExcelIcon/>
+  })[type] || <DefaultIcon/>;
+}
+
+const getTitle = result =>
+  (  result._source.meta.title && result._source.meta.title.trim().length > 0  )
+    ? result._source.meta.title
+    : result._source.file.filename;
+
+const GridItem = ({bemBlocks, result}) => {
+  console.log('result',result);
+  return (
+    <div className="grid-result" data-qa="hit">
+      {getIcon(result._source.file.content_type)}
+      <h5>{getTitle(result)}</h5>
+    </div>
+  )
+}
 
 class App extends Component {
   host = '/api/docs';
@@ -32,6 +67,13 @@ class App extends Component {
     'pagination.next': 'Next Page',
     'pagination.previous': 'Previous Page',
   }[key])});
+
+  queryFields=[
+    'file.filename',
+    'meta.author',
+    'meta.title',
+    'content'
+  ];
 
   render() {
     return (
@@ -45,27 +87,31 @@ class App extends Component {
                 queryOptions={{minimum_should_match: '70%'}}
                 autofocus={true}
                 searchOnChange={true}
-                queryFields={[]}/>
+                queryFields={this.queryFields}/>
             </TopBar>
             <LayoutBody>
               <SideBar>
                 <HierarchicalMenuFilter
-                  fields={[]}
-                  title="Categories"
-                  id="categories"/>
-                <RefinementListFilter
-                  id=""
-                  title="Refinement"
-                  field=""
-                  operator="AND"/>
+                  fields={['file.content_type']}
+                  title="File Type"
+                  id="file-type"/>
+                <RangeFilter
+                  title="File Size"
+                  id="filesize"
+                  min={0}
+                  max={1000000}
+                  field={'file.filesize'}
+                  showHistogram={true}/>
               </SideBar>
-              {/*<LayoutResults>
+              <LayoutResults>
                 <ActionBar>
                   <ActionBarRow>
-                    <HitStats translations={{
-                      'hitstats.results_found':'{hitCount} results found'
-                    }}/>
+                    <HitsStats translations={{
+                      "hitstats.results_found":"{hitCount} results found"}}/>
                     <ViewSwitcherToggle/>
+                    <SortingSelector options={[
+                        {label: 'Relevance', field: '_score', order: 'desc', defaultOption: true}
+                    ]}/>
                   </ActionBarRow>
                   <ActionBarRow>
                     <SelectedFilters/>
@@ -74,16 +120,14 @@ class App extends Component {
                 </ActionBar>
                 <ViewSwitcherHits
                   hitsPerPage={12}
-                  highlightFields={[]}
-                  sourceFilter={[]}
                   hitComponents={[
-
+                    {key:'grid', title: 'Grid', itemComponent:GridItem, defaultOption:true}
                   ]}
-                  scrollTo="body"/>
-                <NoHits suggestionsField=""/>
+                  scrollTo="body"
+                />
                 <InitialLoader/>
-                <Pagination showNumbers={true}/>
-              </LayoutResults>*/}
+                <Pagination showNumbesr={true}/>
+              </LayoutResults>
             </LayoutBody>
           </Layout>
         </SearchkitProvider>
