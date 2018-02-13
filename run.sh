@@ -1,7 +1,7 @@
 #!/bin/bash
 
-docker stop es-demo || sudo docker stop es-demo
-docker rm es-demo || sudo docker rm es-demo
+sudo docker stop es-demo
+sudo docker rm es-demo
 
 if [ ! -d ./node_modules ] ; then
   npm install
@@ -22,7 +22,7 @@ if [ ! -f ./certificate.pem ]; then
     -out certificate.pem
 fi
 
-docker run \
+sudo docker run \
   --name es-demo \
   -v $(pwd)/certificate.pem:/etc/nginx/certificate.pem:ro \
   -v $(pwd)/key.pem:/etc/nginx/key.pem \
