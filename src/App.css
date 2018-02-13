@@ -26,3 +26,16 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.result-icon {
+  height: auto;
+  width: 50%;
+}
+
+.grid-result {
+  height: 178px;
+  width: 15%;
+  background-color: #eee;
+  margin: 5px;
+  overflow: hidden;
+}
