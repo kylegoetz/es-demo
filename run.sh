@@ -29,6 +29,6 @@ docker run \
   -v $(pwd)/nginx.conf:/etc/nginx/nginx.conf:ro \
   -v $(pwd)/build:/app:ro \
   -v $(pwd)/logs:/logs \
-  -p 443:443 \
+  --net host \
   -d \
   nginx
