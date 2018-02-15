@@ -60,6 +60,15 @@ const GridItem = ({bemBlocks, result}) => {
   )
 }
 
+const ListItem = ({bemBlocks, result}) => {
+  return (
+    <div className="list-result" data-qa="hit">
+      {getIcon(result._source.file.content_type)}
+      <span>{getTitle(result)}</span>
+    </div>
+  );
+}
+
 class App extends Component {
   host = '/api/docs';
   searchkit = Object.assign(new SearchkitManager(this.host), {
@@ -121,7 +130,8 @@ class App extends Component {
                 <ViewSwitcherHits
                   hitsPerPage={12}
                   hitComponents={[
-                    {key:'grid', title: 'Grid', itemComponent:GridItem, defaultOption:true}
+                    {key:'grid', title: 'Grid', itemComponent:GridItem, defaultOption:true},
+                    {key:'list', title: 'List', itemComponent:ListItem}
                   ]}
                   scrollTo="body"
                 />
